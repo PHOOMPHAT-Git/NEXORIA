@@ -1,12 +1,29 @@
 const express = require('express'); 
 const router = express.Router();
-const Product = require('../models/Product.js');
+const User = require('../models/User.js');
 
-router.get('/', (req, res, next) => {
-    Product.find((err, data) => {
-        if (err) return next(err);
+router.get('/', async (req, res, next) => {
+    try {
+        const data = await User.find();
         res.render('index', { title: 'Nexoria', data: data });
-    });
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.post('/', async (req, res, next) => {
+    try {
+        const newUser = new User({
+            name: req.body.name,
+            password: req.body.password,
+            gmail: req.body.gmail
+        });
+        
+        const savedUser = await newUser.save();
+        res.status(201).json({ user: savedUser });
+    } catch (err) {
+        next(err);
+    }
 });
 
 module.exports = router;

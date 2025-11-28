@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>NEXORIA</title>
+    <title>NEXORIA | HOME</title>
     <link rel="icon" type="image/png" href="/img/NEXORIA_GOLD_LOGO.png?v=2"/>
     <link rel="stylesheet" href="stylesheet/home.css">
 </head>
@@ -237,7 +237,6 @@
     <div class="nx-toast-area" id="nx-toast-area" aria-live="polite" aria-atomic="true"></div>
 </body>
 <script>
-
     document.addEventListener("contextmenu", function (e) {
         e.preventDefault();
     });
@@ -655,68 +654,6 @@
         }
     }
     updateExchangeRate();
-</script>
-<script>
-    (() => {
-        function currentLang(){
-            const l=(document.documentElement.getAttribute('lang')||'en').toLowerCase();
-            return l.startsWith('th')?'th':'en';
-        }
-
-        const I={
-            choose_image:{en:'Choose Image',th:'เลือกรูปภาพ'},
-            file_selected:{en:'File selected: {name}',th:'เลือกไฟล์: {name}'},
-            no_file:{en:'No file selected',th:'ไม่ได้เลือกไฟล์'},
-            need_input:{en:'Please type a message or choose an image',th:'กรุณาพิมพ์ข้อความหรือเลือกรูปภาพ'},
-            sent_text:{en:'Sent: {text}',th:'ส่งข้อความ: {text}'},
-            uploading:{en:'Uploading: {name}',th:'อัปโหลด: {name}'},
-            error:{en:'Something went wrong',th:'เกิดข้อผิดพลาดในการส่งข้อมูล'}
-        };
-
-        function t(key, vars){
-            const lang=currentLang();
-            let s=(I[key]&&I[key][lang])||key;
-            if(vars) for(const k in vars){ s=s.replace(new RegExp('\\{'+k+'\\}','g'), String(vars[k])); }
-            return s;
-        }
-
-        const form=document.getElementById('miniForm');
-        const fileInput=document.getElementById('miniFile');
-        const fileLabel=document.querySelector('label.nx-file-label');
-        const textInput=form?.querySelector('input[name="message"]');
-
-        if(fileLabel) fileLabel.textContent=t('choose_image');
-        if(textInput) textInput.placeholder=currentLang()==='th'?'พิมพ์ข้อความ...':'Type a message...';
-
-        if(fileInput&&fileLabel){
-            fileInput.addEventListener('change',()=>{
-                const f=fileInput.files[0];
-                fileLabel.textContent=f?f.name:t('choose_image');
-                window.showToast(f?t('file_selected',{name:f.name}):t('no_file'));
-            });
-        }
-
-        if(form){
-            form.addEventListener('submit',async e=>{
-                e.preventDefault();
-                const msg=(form.message?.value||'').trim();
-                const file=form.image?.files?.[0]||null;
-                if(!msg && !file){ window.showToast(t('need_input')); return; }
-                try{
-                    const fd=new FormData();
-                    if(msg) fd.append('message',msg);
-                    if(file) fd.append('image',file);
-                    window.showToast(file?t('uploading',{name:file.name}):t('sent_text',{text:msg}));
-                    form.reset();
-                    if(fileLabel) fileLabel.textContent=t('choose_image');
-                    if(textInput) textInput.placeholder=currentLang()==='th'?'พิมพ์ข้อความ...':'Type a message...';
-                }catch(err){
-                    window.showToast(t('error'));
-                    console.error(err);
-                }
-            });
-        }
-    })();
 </script>
 <script src="/javascript/firework.js"></script>
 <script src="/javascript/lotframeSlider.js"></script>
